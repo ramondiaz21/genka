@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title></title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="">
+  <!--<meta content="width=device-width, initial-scale=1" name="viewport" />
+  <meta name="viewport" content="width=device-width, user-scalable=no">-->
+  <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+  <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+    integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+  <!--<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">-->
+  <link href="css/main.css" media="all" rel="stylesheet" type="text/css" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Encode+Sans:wght@100;200;300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,200;1,300;1,400;1,600;1,700;1,900&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" type="text/css"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css">
+</head>
+
+<style>
+  /* ---- isotope wrapper ---- */
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: sans-serif;
+  }
+
+  /* ---- button ---- */
+
+  .button {
+    display: inline-block;
+    padding: 0.5em 1.0em;
+    background: #EEE;
+    border: none;
+    border-radius: 7px;
+    background-image: linear-gradient(to bottom, hsla(0, 0%, 0%, 0), hsla(0, 0%, 0%, 0.2));
+    color: #222;
+    font-family: sans-serif;
+    font-size: 16px;
+    text-shadow: 0 1px white;
+    cursor: pointer;
+  }
+
+  .button:hover {
+    background-color: #8CF;
+    text-shadow: 0 1px hsla(0, 0%, 100%, 0.5);
+    color: #222;
+  }
+
+  .button:active,
+  .button.is-checked {
+    background-color: #28F;
+  }
+
+  .button.is-checked {
+    color: white;
+    text-shadow: 0 -1px hsla(0, 0%, 0%, 0.8);
+  }
+
+  .button:active {
+    box-shadow: inset 0 1px 10px hsla(0, 0%, 0%, 0.8);
+  }
+
+  /* ---- button-group ---- */
+
+  .button-group {
+    margin-bottom: 20px;
+  }
+
+  .button-group:after {
+    content: '';
+    display: block;
+    clear: both;
+  }
+
+  .button-group .button {
+    float: left;
+    border-radius: 0;
+    margin-left: 0;
+    margin-right: 1px;
+  }
+
+  .button-group .button:first-child {
+    border-radius: 0.5em 0 0 0.5em;
+  }
+
+  .button-group .button:last-child {
+    border-radius: 0 0.5em 0.5em 0;
+  }
+
+  /* ---- isotope ---- */
+
+  .grid {
+    border: 1px solid #333;
+  }
+
+  /* clear fix */
+  .grid:after {
+    content: '';
+    display: block;
+    clear: both;
+  }
+
+  /* ---- .element-item ---- */
+
+  .element-item {
+    position: relative;
+    float: left;
+    width: 100px;
+    height: 100px;
+    margin: 5px;
+    padding: 10px;
+    background: #888;
+    color: #262524;
+  }
+
+  .element-item>* {
+    margin: 0;
+    padding: 0;
+  }
+
+  .element-item .name {
+    position: absolute;
+
+    left: 10px;
+    top: 60px;
+    text-transform: none;
+    letter-spacing: 0;
+    font-size: 12px;
+    font-weight: normal;
+  }
+
+  .element-item .symbol {
+    position: absolute;
+    left: 10px;
+    top: 0px;
+    font-size: 42px;
+    font-weight: bold;
+    color: white;
+  }
+
+  .element-item .number {
+    position: absolute;
+    right: 8px;
+    top: 5px;
+  }
+
+  .element-item .weight {
+    position: absolute;
+    left: 10px;
+    top: 76px;
+    font-size: 12px;
+  }
+
+  .element-item {
+    background: #F00;
+    background: hsl(0, 100%, 50%);
+  }
+</style>
+
+<style>
+  .portfolio .button {
+    border-radius: 100px !important;
+    font-family: "Poppins", sans-serif;
+    text-shadow: none;
+  }
+
+  .portfolio .x-text {
+    font-size: 1.2550000000000001em;
+    font-weight: 500;
+    line-height: 1.9;
+    letter-spacing: -0.006em;
+    color: #060221;
+    border: 0;
+    font-style: normal;
+    text-transform: none;
+    font-family: "Poppins", sans-serif;
+  }
+
+  .portfolio .title {
+    color: #060221;
+    margin: 15px 0;
+  }
+
+  .portfolio .text {
+    color: #808291;
+    font-weight: 400;
+    line-height: 2;
+    letter-spacing: 0.07800000000000001em;
+    font-size: 0.9880000000000001em;
+  }
+
+  .portfolio .hashtags {
+    color: #77d2fa;
+    margin-top: 10px;
+  }
+
+  .portfolio .element-item {
+    width: 33.33%;
+    height: auto;
+    margin: 0;
+    text-align: center;
+    background-color: transparent;
+  }
+
+  .portfolio .grid {
+    border: none;
+    display: grid;
+    justify-items: center;
+    min-height: 80vh;
+  }
+
+  .portfolio .button-group {
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .portfolio button:focus {
+    outline: none;
+  }
+
+  @media (max-width: 767.98px) {
+    .portfolio .element-item {
+      width: 100%;
+    }
+
+    .portfolio .button-group {
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+  }
+</style>
+
+<body class="">
+
+  <div class="portfolio">
+    <!-- <h1>Isotope - filtering &amp; sorting</h1>
+    <h2>Filter</h2> -->
+    <div id="filters" class="button-group"> <button class="button is-checked" data-filter="*">Todos</button>
+      <button class="button" data-filter=".branding">Branding</button>
+      <button class="button" data-filter=".paginaWeb">Página Web</button>
+      <button class="button" data-filter=".social">Social Media</button>
+      <button class="button" data-filter=".diseno">Diseño Gráfico</button>
+      <button class="button" data-filter=".fotografia">Fotografía</button>
+      <button class="button" data-filter=".video">Video</button>
+    </div>
+
+    <!-- <h2>Sort</h2>
+    <div id="sorts" class="button-group"> <button class="button is-checked" data-sort-by="original-order">original
+        order</button>
+      <button class="button" data-sort-by="name">name</button>
+      <button class="button" data-sort-by="symbol">symbol</button>
+      <button class="button" data-sort-by="number">number</button>
+      <button class="button" data-sort-by="weight">weight</button>
+      <button class="button" data-sort-by="category">category</button>
+    </div> -->
+
+    <div class="grid row" data-isotope="{" layoutMode": "fitRows" }">
+      <div class="element-item col-12 col-md-4  branding paginaWeb" data-category="branding">
+        <img src="https://inovaenterprise.com/wp-content/uploads/2023/03/Tequila-gran-diamante-branding-cover.jpg"
+          class="portfolio-image" alt="">
+        <p class="x-text title">Tequila Diamante</p>
+        <p class="x-text text">Lorem ipsum odor amet, consectetuer adipiscing elit. Tempus malesuada quis risus gravida
+          phasellus; neque molestie placerat
+        </p>
+        <p class="x-text text hashtags">#Branding #PáginaWeb</p>
+      </div>
+      <div class="element-item col-12 col-md-4  branding paginaWeb" data-category="branding">
+        <img src="https://inovaenterprise.com/wp-content/uploads/2023/03/loscocos-website-cover.jpg"
+          class="portfolio-image" alt="">
+        <p class="x-text title">Los Cocos - Ostionería & Marisquería
+        </p>
+        <p class="x-text text">Lorem ipsum odor amet, consectetuer adipiscing elit. Tempus malesuada quis risus gravida
+          phasellus; neque molestie placerat
+        </p>
+        <p class="x-text text hashtags">#Branding #PáginaWeb</p>
+      </div>
+      <div class="element-item col-12 col-md-4  paginaWeb social" data-category="branding">
+        <img src="https://inovaenterprise.com/wp-content/uploads/2023/03/brs-website-cover.jpg" class="portfolio-image"
+          alt="">
+        <p class="x-text title">BRS Mechanical SD
+        </p>
+        <p class="x-text text">Lorem ipsum odor amet, consectetuer adipiscing elit. Tempus malesuada quis risus gravida
+          phasellus; neque molestie placerat
+        </p>
+        <p class="x-text text hashtags">#PáginaWeb #SocialMedia</p>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+    integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+    crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js"></script>
+  <script>
+    var $grid = $('.grid').isotope({
+      itemSelector: '.element-item',
+      layoutMode: 'fitRows',
+      getSortData: {
+        name: '.name',
+        symbol: '.symbol',
+        number: '.number parseInt',
+        category: '[data-category]',
+        weight: function (itemElem) {
+          var weight = $(itemElem).find('.weight').text();
+          return parseFloat(weight.replace(/[\(\)]/g, ''));
+        }
+      }
+    });
+
+    // filter functions
+    var filterFns = {
+      // show if number is greater than 50
+      numberGreaterThan50: function () {
+        var number = $(this).find('.number').text();
+        return parseInt(number, 10) > 50;
+      },
+      // show if name ends with -ium
+      ium: function () {
+        var name = $(this).find('.name').text();
+        return name.match(/ium$/);
+      }
+    };
+
+    // bind filter button click
+    $('#filters').on('click', 'button', function () {
+      var filterValue = $(this).attr('data-filter');
+      // use filterFn if matches value
+      filterValue = filterFns[filterValue] || filterValue;
+      $grid.isotope({ filter: filterValue });
+    });
+
+    // bind sort button click
+    $('#sorts').on('click', 'button', function () {
+      var sortByValue = $(this).attr('data-sort-by');
+      $grid.isotope({ sortBy: sortByValue });
+    });
+
+    // change is-checked class on buttons
+    $('.portfolio .button-group').each(function (i, buttonGroup) {
+      var $buttonGroup = $(buttonGroup);
+      $buttonGroup.on('click', 'button', function () {
+        $buttonGroup.find('.is-checked').removeClass('is-checked');
+        $(this).addClass('is-checked');
+      });
+    });
+
+
+  </script>
+</body>
+
+</html>
