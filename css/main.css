@@ -939,14 +939,14 @@ a {
 }
 
 .rastreo li,
-  .rastreo p {
+.rastreo p {
   font-family: "Source Sans Pro", sans-serif;
   font-size: 1.2rem !important;
   font-weight: 600;
 }
 
-.rastreo .info-wrapper h5{
-color:#add46a;
+.rastreo .info-wrapper h5 {
+  color: #add46a;
 }
 
 .rastreo h5 {
@@ -985,7 +985,6 @@ color:#add46a;
 
 .rastreo hr {
   border-top: 1px solid #add46a8f;
-
 }
 
 .rastreo textarea:focus {
@@ -998,11 +997,40 @@ color:#add46a;
   border-radius: 12px;
   height: 100%;
   margin: 15px 0;
+  max-height: 400px;
+  overflow-y: scroll;
   padding: 15px;
   width: 100%;
 }
 
-.rastreo-resultado-wrapper {
+.rastreo .rastreo-resultado-wrapper {
   display: flex;
   justify-content: space-between;
+}
+
+
+.rastreo .dotted::-webkit-scrollbar {
+  -webkit-appearance: none;
+}
+
+.rastreo .dotted::-webkit-scrollbar:vertical {
+  width:10px;
+}
+
+/* .rastreo .dotted::-webkit-scrollbar-button:increment,.rastreo .dotted::-webkit-scrollbar-button {
+  //display: none;
+}  */
+
+.rastreo .dotted::-webkit-scrollbar:horizontal {
+  height: 10px;
+}
+
+.rastreo .dotted::-webkit-scrollbar-thumb {
+  background-color: #7979795d;
+  border-radius: 20px;
+  border: 2px solid #f1f2f3;
+}
+
+.rastreo .dotted::-webkit-scrollbar-track {
+  border-radius: 10px;  
 }
