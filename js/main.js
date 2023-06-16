@@ -88,12 +88,14 @@ $(document).ready(function () {
 
 // Definición de función asíncrona para obtener datos de la API
 async function getDataFromAPI(numerosGuia) {
-  const url = "https://my-json-server.typicode.com/ramondiaz21/genka-api/guias";
+  const url = "https://my-json-server.typicode.com/ramondiaz21/genka-api2/guias";
   const response = await fetch(url);
   const allData = await response.json();
 
   return numerosGuia.map(numeroGuia => allData.find(data => data.numeroGuia === numeroGuia));
 }
+
+moment.locale('es');
 
 // Definición de función para mostrar los datos de rastreo en la página
 function showTrackingData(guiaData) {
@@ -101,33 +103,72 @@ function showTrackingData(guiaData) {
   guiaShowDiv.innerHTML = ""; // limpiando cualquier dato anterior
 
   guiaData.forEach(data => {
+    const resultWrapper = document.createElement("div");
+    resultWrapper.classList.add("rastreo-resultado-wrapper");
+
     const guiaNumber = document.createElement("h5");
     guiaNumber.textContent = `Número de guía: ${data.numeroGuia}`;
-    const movementsTitle = document.createElement("h5");
-    const divider = document.createElement("hr");
-    const movements = document.createElement("ul");
-
-    movementsTitle.textContent = `Movimientos: `;
 
     data.movimientos.forEach(movimiento => {
-      const movementItem = document.createElement("li");
-      movementItem.textContent = `Fecha: ${movimiento.fechaMovimiento} - Status: ${movimiento.situacion} - Ubicación: ${movimiento.localizacion}`;
-      movements.appendChild(movementItem);
+      const statusWrapper = document.createElement("div");
+      statusWrapper.classList.add("status-wrapper");
+
+      const situationImage = document.createElement("img");
+      const situationText = document.createElement("h5");
+      switch (movimiento.situacion) {
+        case 'ORIGEN':
+          situationImage.src = 'https://www.genka.mx/wp-content/uploads/2023/06/origen.jpg';
+          break;
+        case 'TRANSITO':
+          situationImage.src = 'https://www.genka.mx/wp-content/uploads/2023/06/transito.jpg';
+          break;
+        case 'DESTINO':
+          situationImage.src = 'https://www.genka.mx/wp-content/uploads/2023/06/destino.jpg';
+          break;
+        default:
+          situationImage.src = ''; // Default src si ninguna de las situaciones coincide
+      }
+      situationImage.alt = movimiento.situacion; // Alt text para la imagen
+      situationText.textContent = movimiento.situacion;
+
+      statusWrapper.appendChild(situationText);
+      statusWrapper.appendChild(situationImage);
+
+      const infoWrapper = document.createElement("div");
+      infoWrapper.classList.add("info-wrapper");
+
+      const dateText = document.createElement("p");
+      const dateMoment = moment(movimiento.fechaMovimiento, 'YYYY/MM/DD HH:mm');
+      dateText.textContent = dateMoment.format('DD-MMMM-YYYY'); // Formato fecha
+
+
+      const timeLocationText = document.createElement("p");
+      timeLocationText.textContent = `${dateMoment.format('HH:mm')} - ${movimiento.localizacion}`; // Formato hora y ubicación
+
+      infoWrapper.appendChild(dateText);
+      infoWrapper.appendChild(situationText);
+      infoWrapper.appendChild(timeLocationText);
+
+      resultWrapper.appendChild(statusWrapper);
+      resultWrapper.appendChild(infoWrapper);
+
+      guiaShowDiv.appendChild(guiaNumber);
+      guiaShowDiv.appendChild(resultWrapper);
     });
 
-    guiaShowDiv.appendChild(guiaNumber);
-    guiaShowDiv.appendChild(movementsTitle);
-    guiaShowDiv.appendChild(movements);
+    const divider = document.createElement("hr");
     guiaShowDiv.appendChild(divider);
   });
 }
+
+
 
 // Definición de función para manejar el evento de click del botón
 function handleButtonClick() {
   const textarea = document.getElementById("trackTextArea");
   const trackButton = document.getElementById("trackButton");
 
-  trackButton.addEventListener("click", async function() {
+  trackButton.addEventListener("click", async function () {
     const numerosGuia = textarea.value.split(",").map(num => num.trim());
 
     if (numerosGuia.length > 25) {

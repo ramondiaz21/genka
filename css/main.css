@@ -938,10 +938,15 @@ a {
   font-weight: 600;
 }
 
-.rastreo li {
+.rastreo li,
+  .rastreo p {
   font-family: "Source Sans Pro", sans-serif;
   font-size: 1.2rem !important;
   font-weight: 600;
+}
+
+.rastreo .info-wrapper h5{
+color:#add46a;
 }
 
 .rastreo h5 {
@@ -995,4 +1000,9 @@ a {
   margin: 15px 0;
   padding: 15px;
   width: 100%;
+}
+
+.rastreo-resultado-wrapper {
+  display: flex;
+  justify-content: space-between;
 }
