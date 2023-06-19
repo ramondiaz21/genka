@@ -86,14 +86,35 @@ $(document).ready(function () {
 });
 
 
-// Definición de función asíncrona para obtener datos de la API
 async function getDataFromAPI(numerosGuia) {
-  const url = "https://my-json-server.typicode.com/ramondiaz21/genka-api2/guias";
-  const response = await fetch(url);
+  // Indica la URL del archivo PHP que devuelve los datos
+  const url = "./js/main.php";
+  
+  // Realiza la petición a la URL
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      numeroGuia: numerosGuia,
+      usrLogin: "RASTREO",
+      passLogin: "36Genka-",
+    }),
+  });
+
+  // Si la petición falla, lanza un error
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  // Convierte la respuesta en JSON
   const allData = await response.json();
 
   return numerosGuia.map(numeroGuia => allData.find(data => data.numeroGuia === numeroGuia));
 }
+
+
 
 moment.locale('es');
 
