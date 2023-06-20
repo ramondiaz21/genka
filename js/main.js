@@ -85,45 +85,47 @@ $(document).ready(function () {
   });
 });
 
-
 async function getDataFromAPI(numerosGuia) {
-  // Indica la URL del archivo PHP que devuelve los datos
-  const url = "./js/main.php";
-  
-  // Realiza la petición a la URL
+  const url = "https://www.genka.mx/main.php";
+
   const response = await fetch(url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      numeroGuia: numerosGuia,
-      usrLogin: "RASTREO",
-      passLogin: "36Genka-",
+      numeroGuia: numerosGuia
     }),
   });
 
-  // Si la petición falla, lanza un error
   if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
+    const errorText = await response.text();
+    throw new Error(`HTTP error! status: ${response.status}, body: ${errorText}`);
   }
 
-  // Convierte la respuesta en JSON
-  const allData = await response.json();
-
-  return numerosGuia.map(numeroGuia => allData.find(data => data.numeroGuia === numeroGuia));
+  const responseText = await response.text();
+  let allData;
+  try {
+    allData = JSON.parse(responseText);
+  } catch {
+    throw new Error(`Failed to parse response as JSON: ${responseText}`);
+  }
+  
+  return allData;
 }
-
-
 
 moment.locale('es');
 
-// Definición de función para mostrar los datos de rastreo en la página
 function showTrackingData(guiaData) {
   const guiaShowDiv = document.getElementById("guia-show");
-  guiaShowDiv.innerHTML = ""; // limpiando cualquier dato anterior
+  guiaShowDiv.innerHTML = ""; 
 
   guiaData.forEach(data => {
+    if (!data || !data.movimientos) {
+      console.warn('Invalid data encountered', data);
+      return;
+    }
+
     const resultWrapper = document.createElement("div");
     resultWrapper.classList.add("rastreo-resultado-wrapper");
 
@@ -147,9 +149,9 @@ function showTrackingData(guiaData) {
           situationImage.src = 'https://www.genka.mx/wp-content/uploads/2023/06/destino.jpg';
           break;
         default:
-          situationImage.src = ''; // Default src si ninguna de las situaciones coincide
+          situationImage.src = '';
       }
-      situationImage.alt = movimiento.situacion; // Alt text para la imagen
+      situationImage.alt = movimiento.situacion; 
       situationText.textContent = movimiento.situacion;
 
       statusWrapper.appendChild(situationText);
@@ -160,11 +162,10 @@ function showTrackingData(guiaData) {
 
       const dateText = document.createElement("p");
       const dateMoment = moment(movimiento.fechaMovimiento, 'YYYY/MM/DD HH:mm');
-      dateText.textContent = dateMoment.format('DD-MMMM-YYYY'); // Formato fecha
-
+      dateText.textContent = dateMoment.format('DD-MMMM-YYYY');
 
       const timeLocationText = document.createElement("p");
-      timeLocationText.textContent = `${dateMoment.format('HH:mm')} - ${movimiento.localizacion}`; // Formato hora y ubicación
+      timeLocationText.textContent = `${dateMoment.format('HH:mm')} - ${movimiento.localizacion}`;
 
       infoWrapper.appendChild(dateText);
       infoWrapper.appendChild(situationText);
@@ -182,9 +183,6 @@ function showTrackingData(guiaData) {
   });
 }
 
-
-
-// Definición de función para manejar el evento de click del botón
 function handleButtonClick() {
   const textarea = document.getElementById("trackTextArea");
   const trackButton = document.getElementById("trackButton");
@@ -197,10 +195,14 @@ function handleButtonClick() {
       return;
     }
 
-    const guiaData = await getDataFromAPI(numerosGuia);
+    const guiaData = [];
+    for(const numeroGuia of numerosGuia){
+      const data = await getDataFromAPI(numeroGuia);
+      guiaData.push(data);
+    }
+
     showTrackingData(guiaData);
   });
 }
 
-// Ejecutando la función al cargar la página
 window.onload = handleButtonClick;
