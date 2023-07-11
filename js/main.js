@@ -109,98 +109,101 @@ async function getDataFromAPI(numerosGuia) {
 
   let responseText = await response.text();
   let allData = JSON.parse(responseText);
-  console.log(allData);
 
-  // No convertirlo a un array si es un objeto
+  // Verificamos si allData es una matriz y, si no, la convertimos en una
+  if (!Array.isArray(allData)) {
+    allData = [allData];
+  }
+
+  // Convertimos cada cadena JSON en un objeto JSON
+  allData = allData.map(dataItem => JSON.parse(dataItem));
+
   return allData;
 }
-
 
 moment.locale('es');
 
 function showTrackingData(guiaData) {
-  // Verificar si guiaData es un array que contiene una cadena de texto,
-  // y si es así, convertirla a un objeto
-  if (Array.isArray(guiaData) && guiaData.length === 1 && typeof guiaData[0] === "string") {
-    try {
-      guiaData = JSON.parse(guiaData[0]);
-    } catch (e) {
-      console.error("Error al parsear guiaData: ", e);
-    }
-  }
-
   console.log("showTrackingData called with", guiaData);
 
   const guiaShowDiv = document.getElementById("guia-show");
   guiaShowDiv.innerHTML = "";
 
-  if (!guiaData || !guiaData.movimientos) {
-    console.warn('Invalid data encountered', guiaData);
-    return;
-  }
+  guiaData.forEach(dataArray => {
+    dataArray.forEach(data => {
+      // Comprueba si los datos son válidos
+      if (!data || !data.movimientos) {
+        console.warn('Invalid data encountered', data);
+        return;
+      }
 
-  const resultWrapper = document.createElement("div");
-  resultWrapper.classList.add("rastreo-resultado-wrapper");
+      const resultWrapper = document.createElement("div");
+      resultWrapper.classList.add("rastreo-resultado-wrapper");
 
-  const guiaNumber = document.createElement("h5");
-  guiaNumber.textContent = `Número de guía: ${guiaData.numeroGuia}`;
+      const guiaNumber = document.createElement("h5");
+      guiaNumber.textContent = `Número de guía: ${data.numeroGuia}`;
 
-  resultWrapper.appendChild(guiaNumber);
+      resultWrapper.appendChild(guiaNumber);
 
-  guiaData.movimientos.forEach(movimiento => {
-    const statusWrapper = document.createElement("div");
-    statusWrapper.classList.add("status-wrapper");
+      data.movimientos.forEach(movimiento => {
+        const statusWrapper = document.createElement("div");
+        statusWrapper.classList.add("status-wrapper");
 
-    const situationImage = document.createElement("img");
-    const situationText = document.createElement("h5");
-    switch (movimiento.situacion) {
-        case 'EMBARCADO':
-        situationImage.src = 'https://www.genka.mx/wp-content/uploads/2023/06/origen.jpg';
-        break;
-        case 'NO ENTREGADO':
-          situationImage.src = 'https://www.genka.mx/wp-content/uploads/2023/06/origen.jpg';
-          break;
-      case 'PREDOCUMENTADO':
-        situationImage.src = 'https://www.genka.mx/wp-content/uploads/2023/06/transito.jpg';
-        break;
-      case 'ENTREGADO':
-        situationImage.src = 'https://www.genka.mx/wp-content/uploads/2023/06/destino.jpg';
-        break;
-      default:
-        situationImage.src = '';
-    }
-    situationImage.alt = movimiento.situacion;
-    situationText.textContent = movimiento.situacion;
+        const situationImage = document.createElement("img");
+        const situationText = document.createElement("h5");
+        switch (movimiento.situacion) {
+          case 'EMBARCADO':
+            situationImage.src = 'https://www.genka.mx/wp-content/uploads/2023/06/origen.jpg';
+            break;
+          case 'NO ENTREGADO':
+            situationImage.src = 'https://www.genka.mx/wp-content/uploads/2023/06/origen.jpg';
+            break;
+          case 'PREDOCUMENTADO':
+            situationImage.src = 'https://www.genka.mx/wp-content/uploads/2023/06/transito.jpg';
+            break;
+            case 'DOCUMENTADO':
+              situationImage.src = 'https://www.genka.mx/wp-content/uploads/2023/06/transito.jpg';
+              break;
+          case 'ENTREGADO':
+            situationImage.src = 'https://www.genka.mx/wp-content/uploads/2023/06/destino.jpg';
+            break;
+          default:
+            situationImage.src = '';
+        }
+        situationImage.alt = movimiento.situacion;
+        situationText.textContent = movimiento.situacion;
 
-    statusWrapper.appendChild(situationText);
-    statusWrapper.appendChild(situationImage);
+        statusWrapper.appendChild(situationText);
+        statusWrapper.appendChild(situationImage);
 
-    const infoWrapper = document.createElement("div");
-    infoWrapper.classList.add("info-wrapper");
+        const infoWrapper = document.createElement("div");
+        infoWrapper.classList.add("info-wrapper");
 
-    const dateText = document.createElement("p");
-    const dateMoment = moment(movimiento.fechaMovimiento, 'YYYY/MM/DD HH:mm');
-    dateText.textContent = dateMoment.format('DD-MMMM-YYYY');
+        const dateText = document.createElement("p");
+        const dateMoment = moment(movimiento.fechaMovimiento, 'YYYY/MM/DD HH:mm');
+        dateText.textContent = dateMoment.format('DD-MMMM-YYYY');
 
-    const timeLocationText = document.createElement("p");
-    timeLocationText.textContent = `${dateMoment.format('HH:mm')} - ${movimiento.localizacion}`;
+        const timeLocationText = document.createElement("p");
+        timeLocationText.textContent = `${dateMoment.format('HH:mm')} - ${movimiento.localizacion}`;
 
-    infoWrapper.appendChild(dateText);
-    infoWrapper.appendChild(situationText);
-    infoWrapper.appendChild(timeLocationText);
+        infoWrapper.appendChild(dateText);
+        infoWrapper.appendChild(situationText);
+        infoWrapper.appendChild(timeLocationText);
 
-    resultWrapper.appendChild(statusWrapper);
-    resultWrapper.appendChild(infoWrapper);
+        resultWrapper.appendChild(statusWrapper);
+        resultWrapper.appendChild(infoWrapper);
 
-    guiaShowDiv.appendChild(guiaNumber);
-    guiaShowDiv.appendChild(resultWrapper);
+        guiaShowDiv.appendChild(guiaNumber);
+        guiaShowDiv.appendChild(resultWrapper);
 
-    resultWrapper.appendChild(infoWrapper);
-    console.log(resultWrapper);
+        resultWrapper.appendChild(infoWrapper);
+        console.log(resultWrapper);
+      });
+
+      const divider = document.createElement("hr");
+      guiaShowDiv.appendChild(divider);
+    });
   });
-
-  const divider = document.createElement("hr");
-  guiaShowDiv.appendChild(divider);
 }
 
 
@@ -217,13 +220,10 @@ async function handleButtonClick() {
       return;
     }
 
-    // Mapea los números de guía a promesas de datos de guía
     const guiaDataPromises = numerosGuia.map(numeroGuia => getDataFromAPI(numeroGuia));
 
-    // Espera a que todas las promesas se resuelvan
     const guiaData = await Promise.all(guiaDataPromises);
 
-    // Luego muestra los datos
     showTrackingData(guiaData);
   });
 }
