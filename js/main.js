@@ -118,13 +118,19 @@ async function getDataFromAPI(numerosGuia) {
   // Convertimos cada cadena JSON en un objeto JSON
   allData = allData.map(dataItem => JSON.parse(dataItem));
 
+  allData.forEach(dataItem => {
+    if (!dataItem || !dataItem.movimientos) {
+      alert(`El número de guía ${numerosGuia} no existe o es incorrecto.`);
+    }
+  });
+
   return allData;
 }
 
 moment.locale('es');
 
 function showTrackingData(guiaData) {
-  console.log("showTrackingData called with", guiaData);
+  //console.log("showTrackingData called with", guiaData);
 
   const guiaShowDiv = document.getElementById("guia-show");
   guiaShowDiv.innerHTML = "";
@@ -133,7 +139,7 @@ function showTrackingData(guiaData) {
     dataArray.forEach((data, dataIndex) => {
       // Comprueba si los datos son válidos
       if (!data || !data.movimientos) {
-        console.warn('Invalid data encountered', data);
+        //console.warn('Invalid data encountered', data);
         return;
       }
 
@@ -222,11 +228,13 @@ async function handleButtonClick() {
       return;
     }
 
-    const guiaDataPromises = numerosGuia.map(numeroGuia => getDataFromAPI(numeroGuia));
-
-    const guiaData = await Promise.all(guiaDataPromises);
-
-    showTrackingData(guiaData);
+    try {
+      const guiaDataPromises = numerosGuia.map(numeroGuia => getDataFromAPI(numeroGuia));
+      const guiaData = await Promise.all(guiaDataPromises);
+      showTrackingData(guiaData);
+    } catch (error) {
+      console.error('Error fetching guide data', error);
+    }
   });
 }
 window.onload = handleButtonClick;
