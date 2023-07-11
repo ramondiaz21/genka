@@ -129,8 +129,8 @@ function showTrackingData(guiaData) {
   const guiaShowDiv = document.getElementById("guia-show");
   guiaShowDiv.innerHTML = "";
 
-  guiaData.forEach(dataArray => {
-    dataArray.forEach(data => {
+  guiaData.forEach((dataArray, arrayIndex) => {
+    dataArray.forEach((data, dataIndex) => {
       // Comprueba si los datos son válidos
       if (!data || !data.movimientos) {
         console.warn('Invalid data encountered', data);
@@ -143,9 +143,13 @@ function showTrackingData(guiaData) {
       const guiaNumber = document.createElement("h5");
       guiaNumber.textContent = `Número de guía: ${data.numeroGuia}`;
 
-      resultWrapper.appendChild(guiaNumber);
+      guiaShowDiv.appendChild(guiaNumber);
+      guiaShowDiv.appendChild(resultWrapper);
 
       data.movimientos.forEach(movimiento => {
+        const statusInfoWrapper = document.createElement("div");
+        statusInfoWrapper.classList.add("status-info-wrapper");
+
         const statusWrapper = document.createElement("div");
         statusWrapper.classList.add("status-wrapper");
 
@@ -161,9 +165,9 @@ function showTrackingData(guiaData) {
           case 'PREDOCUMENTADO':
             situationImage.src = 'https://www.genka.mx/wp-content/uploads/2023/06/transito.jpg';
             break;
-            case 'DOCUMENTADO':
-              situationImage.src = 'https://www.genka.mx/wp-content/uploads/2023/06/transito.jpg';
-              break;
+          case 'DOCUMENTADO':
+            situationImage.src = 'https://www.genka.mx/wp-content/uploads/2023/06/transito.jpg';
+            break;
           case 'ENTREGADO':
             situationImage.src = 'https://www.genka.mx/wp-content/uploads/2023/06/destino.jpg';
             break;
@@ -175,6 +179,7 @@ function showTrackingData(guiaData) {
 
         statusWrapper.appendChild(situationText);
         statusWrapper.appendChild(situationImage);
+        statusInfoWrapper.appendChild(statusWrapper);
 
         const infoWrapper = document.createElement("div");
         infoWrapper.classList.add("info-wrapper");
@@ -190,18 +195,15 @@ function showTrackingData(guiaData) {
         infoWrapper.appendChild(situationText);
         infoWrapper.appendChild(timeLocationText);
 
-        resultWrapper.appendChild(statusWrapper);
-        resultWrapper.appendChild(infoWrapper);
-
-        guiaShowDiv.appendChild(guiaNumber);
-        guiaShowDiv.appendChild(resultWrapper);
-
-        resultWrapper.appendChild(infoWrapper);
-        console.log(resultWrapper);
+        statusInfoWrapper.appendChild(infoWrapper);
+        resultWrapper.appendChild(statusInfoWrapper);
       });
 
-      const divider = document.createElement("hr");
-      guiaShowDiv.appendChild(divider);
+      // Solo agregamos un hr si no es el último elemento en el array
+      if (arrayIndex < guiaData.length - 1 || dataIndex < dataArray.length - 1) {
+        const divider = document.createElement("hr");
+        guiaShowDiv.appendChild(divider);
+      }
     });
   });
 }
