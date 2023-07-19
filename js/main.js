@@ -86,10 +86,10 @@ $(document).ready(function () {
 });
 
 //1000000002
-//1000000001 
+//1000000001
 //const url = "https://www.genka.mx/main.php";
 
-async function getDataFromAPI(numerosGuia) {
+async function getDataFromAPI(trackingNumber) {
   const url = "https://www.genka.mx/main.php";
 
   const response = await fetch(url, {
@@ -98,7 +98,7 @@ async function getDataFromAPI(numerosGuia) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      numeroGuia: numerosGuia
+      trackingNumber: trackingNumber,
     }),
   });
 
@@ -119,86 +119,82 @@ async function getDataFromAPI(numerosGuia) {
   allData = allData.map(dataItem => JSON.parse(dataItem));
 
   allData.forEach(dataItem => {
-    if (!dataItem || !dataItem.movimientos) {
-      alert(`El número de guía ${numerosGuia} no existe o es incorrecto.`);
+    if (!dataItem || !dataItem.events) {
+      alert(`El número de guía ${trackingNumber} no existe o es incorrecto.`);
     }
   });
 
   return allData;
 }
 
+
+
 moment.locale('es');
 
+
 function showTrackingData(guiaData) {
-  //console.log("showTrackingData called with", guiaData);
 
   const guiaShowDiv = document.getElementById("guia-show");
   guiaShowDiv.innerHTML = "";
 
   guiaData.forEach((dataArray, arrayIndex) => {
     dataArray.forEach((data, dataIndex) => {
+
       // Comprueba si los datos son válidos
-      if (!data || !data.movimientos) {
-        //console.warn('Invalid data encountered', data);
+      if (!data || !data.events) {
         return;
       }
 
       const resultWrapper = document.createElement("div");
       resultWrapper.classList.add("rastreo-resultado-wrapper");
 
-      const guiaNumber = document.createElement("h5");
-      guiaNumber.textContent = `Número de guía: ${data.numeroGuia}`;
+      const trackingNumber = document.createElement("h5");
+      trackingNumber.textContent = `Número de guía: ${data.trackingNumber}`;
 
-      guiaShowDiv.appendChild(guiaNumber);
+      guiaShowDiv.appendChild(trackingNumber);
       guiaShowDiv.appendChild(resultWrapper);
 
-      data.movimientos.forEach(movimiento => {
+      data.events.forEach(event => {
         const statusInfoWrapper = document.createElement("div");
         statusInfoWrapper.classList.add("status-info-wrapper");
 
         const statusWrapper = document.createElement("div");
         statusWrapper.classList.add("status-wrapper");
 
-        const situationImage = document.createElement("img");
-        const situationText = document.createElement("h5");
-        switch (movimiento.situacion) {
+        const eventImage = document.createElement("img");
+        const eventText = document.createElement("h5");
+        switch (event.event) {
           case 'EMBARCADO':
-            situationImage.src = 'https://www.genka.mx/wp-content/uploads/2023/06/origen.jpg';
+            eventImage.src = 'https://www.genka.mx/wp-content/uploads/2023/06/origen.jpg';
             break;
           case 'NO ENTREGADO':
-            situationImage.src = 'https://www.genka.mx/wp-content/uploads/2023/06/origen.jpg';
-            break;
-          case 'PREDOCUMENTADO':
-            situationImage.src = 'https://www.genka.mx/wp-content/uploads/2023/06/transito.jpg';
+            eventImage.src = 'https://www.genka.mx/wp-content/uploads/2023/06/origen.jpg';
             break;
           case 'DOCUMENTADO':
-            situationImage.src = 'https://www.genka.mx/wp-content/uploads/2023/06/transito.jpg';
-            break;
-          case 'ENTREGADO':
-            situationImage.src = 'https://www.genka.mx/wp-content/uploads/2023/06/destino.jpg';
+            eventImage.src = 'https://www.genka.mx/wp-content/uploads/2023/06/transito.jpg';
             break;
           default:
-            situationImage.src = '';
+            eventImage.src = '';
         }
-        situationImage.alt = movimiento.situacion;
-        situationText.textContent = movimiento.situacion;
+        eventImage.alt = event.event;
+        eventText.textContent = event.event;
 
-        statusWrapper.appendChild(situationText);
-        statusWrapper.appendChild(situationImage);
+        statusWrapper.appendChild(eventText);
+        statusWrapper.appendChild(eventImage);
         statusInfoWrapper.appendChild(statusWrapper);
 
         const infoWrapper = document.createElement("div");
         infoWrapper.classList.add("info-wrapper");
 
         const dateText = document.createElement("p");
-        const dateMoment = moment(movimiento.fechaMovimiento, 'YYYY/MM/DD HH:mm');
+        const dateMoment = moment(event.date, 'YYYY/MM/DD HH:mm');
         dateText.textContent = dateMoment.format('DD-MMMM-YYYY');
 
         const timeLocationText = document.createElement("p");
-        timeLocationText.textContent = `${dateMoment.format('HH:mm')} - ${movimiento.localizacion}`;
+        timeLocationText.textContent = `${dateMoment.format('HH:mm')} - ${event.location}`;
 
         infoWrapper.appendChild(dateText);
-        infoWrapper.appendChild(situationText);
+        infoWrapper.appendChild(eventText);
         infoWrapper.appendChild(timeLocationText);
 
         statusInfoWrapper.appendChild(infoWrapper);
@@ -214,22 +210,21 @@ function showTrackingData(guiaData) {
   });
 }
 
-
 async function handleButtonClick() {
   console.log('handleButtonClick called');
   const textarea = document.getElementById("trackTextArea");
   const trackButton = document.getElementById("trackButton");
 
   trackButton.addEventListener("click", async function () {
-    const numerosGuia = textarea.value.split(",").map(num => num.trim());
+    const trackingNumber = textarea.value.split(",").map(num => num.trim());
 
-    if (numerosGuia.length > 25) {
+    if (trackingNumber.length > 25) {
       alert("Solo puedes introducir hasta 25 números de guía.");
       return;
     }
 
     try {
-      const guiaDataPromises = numerosGuia.map(numeroGuia => getDataFromAPI(numeroGuia));
+      const guiaDataPromises = trackingNumber.map(trackingNumber => getDataFromAPI(trackingNumber));
       const guiaData = await Promise.all(guiaDataPromises);
       showTrackingData(guiaData);
     } catch (error) {

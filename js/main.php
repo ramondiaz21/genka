@@ -11,7 +11,7 @@ try {
     // Preparar la solicitud
     $ch = curl_init($url);
     $payload = json_encode([
-        'numeroGuia' => $data['numeroGuia'],
+        'trackingNumber' => $data['trackingNumber'],
         'usrLogin' => "RASTREO",
         'passLogin' => "1l2RzGrKCep8ea/SsVIKpA==",
     ]);
