@@ -127,10 +127,7 @@ async function getDataFromAPI(trackingNumber) {
   return allData;
 }
 
-
-
 moment.locale('es');
-
 
 function showTrackingData(guiaData) {
 
@@ -211,9 +208,10 @@ function showTrackingData(guiaData) {
 }
 
 async function handleButtonClick() {
-  console.log('handleButtonClick called');
+  //console.log('handleButtonClick called');
   const textarea = document.getElementById("trackTextArea");
   const trackButton = document.getElementById("trackButton");
+  const loader = document.getElementById("loader"); // Asumiendo que tienes un elemento con id="loader" en tu HTML
 
   trackButton.addEventListener("click", async function () {
     const trackingNumber = textarea.value.split(",").map(num => num.trim());
@@ -223,13 +221,18 @@ async function handleButtonClick() {
       return;
     }
 
+    loader.style.display = "block"; // Muestra el loader
+
     try {
       const guiaDataPromises = trackingNumber.map(trackingNumber => getDataFromAPI(trackingNumber));
       const guiaData = await Promise.all(guiaDataPromises);
       showTrackingData(guiaData);
     } catch (error) {
       console.error('Error fetching guide data', error);
+    } finally {
+      loader.style.display = "none"; // Oculta el loader
     }
   });
 }
+
 window.onload = handleButtonClick;
